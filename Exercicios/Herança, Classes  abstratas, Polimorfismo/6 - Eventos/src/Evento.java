@@ -1,13 +1,13 @@
 import java.time.LocalDate;
 import java.util.*;
 
-public class Eventos {
+public class Evento {
     private String nome;
     private LocalDate data;
     private Set<Participante> participantes;
     private int capacidadeMaxima;
 
-    public Eventos(String nome, LocalDate data, int capacidadeMaxima){
+    public Evento(String nome, LocalDate data, int capacidadeMaxima){
         this.capacidadeMaxima = capacidadeMaxima;
         this.data = data;
         this.nome = nome;
@@ -41,6 +41,10 @@ public class Eventos {
 
     public String getNome() {
         return nome;
+    }
+
+    public LocalDate getData() {
+        return data;
     }
 }
 
