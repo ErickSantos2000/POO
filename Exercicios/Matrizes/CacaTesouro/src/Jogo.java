@@ -68,7 +68,7 @@ public class Jogo {
             mostrarTabuleiro();
 
             System.out.println("Movimento restantes: " + movimentosRestantes);
-            System.out.println("Ponto:" + jogador.getPontos());
+           
             System.out.print("Movimento \nW - cima\nS - baixo\nA - esquerda\nD - direita\n");
             char movimento = sc.next().charAt(0);
 
