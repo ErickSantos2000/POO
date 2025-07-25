@@ -2,18 +2,18 @@ import java.util.*;
 
 public class Jogo {
     private ElementoTabuleiro[][] tabuleiro;
-    private boolean[][] filtro;
+
+    private Set<String> filtro;
     private Jogador jogador;
-    private int tesourosEncontrados;
     private int movimentosRestantes;
 
     public Jogo() {
         tabuleiro = new ElementoTabuleiro[6][6];
-        filtro = new boolean[6][6];
-        filtro[0][0] = true;
+        filtro = new HashSet<>();
+        filtro.add("0,0");
         jogador = new Jogador();
-        tesourosEncontrados = 0;
-        inicializarTabuleiro();
+
+
         movimentosRestantes = 10;
     }
 
@@ -61,14 +61,20 @@ public class Jogo {
 
 
     public void jogar() {
+        inicializarTabuleiro();
         Scanner sc = new Scanner(System.in);
 
-        while (jogador.getMovimentos() < 10 && tesourosEncontrados < 3) {
+        while (jogador.getMovimentos() < 10 && jogador.getTesouro() < 3) {
 
             mostrarTabuleiro();
 
+            System.out.println("======================");
             System.out.println("Movimento restantes: " + movimentosRestantes);
-           
+            System.out.println("Ponto:" + jogador.getPontos());
+            System.out.println("Tesouros encontrados: " + jogador.getTesouro());
+            System.out.println("======================");
+
+
             System.out.print("Movimento \nW - cima\nS - baixo\nA - esquerda\nD - direita\n");
             char movimento = sc.next().charAt(0);
 
@@ -92,10 +98,13 @@ public class Jogo {
                 continue;
             }
 
-            if (filtro[linhaTeste][colunaTeste]) {
+            String pos = linhaTeste + "," + colunaTeste;
+
+            if(filtro.contains(pos)){
                 System.out.println("Vc ja visitou essa posiçao. Jogada perdida");
                 continue;
             }
+
 
             // incia o movimento
             jogador.mover(movimento);
@@ -105,21 +114,18 @@ public class Jogo {
             int coluna = jogador.getColuna();
 
             // marca como visitado
-            filtro[linha][coluna] = true;
+            filtro.add(linha + "," + coluna);
 
-            int pontos = tabuleiro[linha][coluna].interagir();
-            jogador.atualizarPontos(pontos);
-
-            if (tabuleiro[linha][coluna] instanceof Tesouro){
-                tesourosEncontrados++;
-            }
+            tabuleiro[linha][coluna].interagir(jogador);
 
 
-            System.out.println("Você encontrou: " + tabuleiro[linha][coluna].simbolo() +
-                    "\nnumero de pontos: " + jogador.getPontos());
+            System.out.println("vc encontrou: " + tabuleiro[linha][coluna].simbolo());
         }
 
-        System.out.println("\nPontuação: " + jogador.getPontos());
+        System.out.println("=========FINAL=========");
+        System.out.println("Pontuação final:" + jogador.getPontos());
+        System.out.println("Tesouros encontrados: " + jogador.getTesouro());
+        System.out.println("=======================");
     }
 
     // imprimir
@@ -128,11 +134,11 @@ public class Jogo {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (i == jogador.getLinha() && j == jogador.getColuna()) {
-                    System.out.print("[🧍]");
-                } else if (filtro[i][j]) {
-                    System.out.print("[ " + tabuleiro[i][j].simbolo() + " ]");
+                    System.out.print(" 🧍 ");
+                } else if (filtro.contains(i + "," + j)) {
+                    System.out.print(" " + tabuleiro[i][j].simbolo() + " ");
                 } else {
-                    System.out.print("[ * ]");
+                    System.out.print(" 🟥 ");
                 }
             }
             System.out.println();

@@ -1,5 +1,8 @@
 public class Armadilha extends ElementoTabuleiro {
-    public int interagir() { return -2; }
+    public void interagir(Jogador jogador) {
+        jogador.atualizarPontos(-2);
+        
+    }
     public String simbolo() { return "💣"; }
 }
 

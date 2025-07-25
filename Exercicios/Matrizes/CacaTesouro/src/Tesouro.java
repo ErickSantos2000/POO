@@ -1,5 +1,10 @@
+
+
 public class Tesouro extends ElementoTabuleiro {
-    public int interagir() { return 3; }
+    public void interagir(Jogador jogador) {
+        jogador.atualizarPontos(3);
+        jogador.setTesouro(jogador.getTesouro()+1);
+    }
     public String simbolo() { return "💰"; }
 }
 

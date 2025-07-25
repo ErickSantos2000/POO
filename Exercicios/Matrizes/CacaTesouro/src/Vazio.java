@@ -1,5 +1,7 @@
 public class Vazio extends ElementoTabuleiro {
-    public int interagir() { return 0; }
+    public void interagir(Jogador jogador) {
+        jogador.atualizarPontos(0);
+    }
     public String simbolo() { return "⬜"; }
 }
 

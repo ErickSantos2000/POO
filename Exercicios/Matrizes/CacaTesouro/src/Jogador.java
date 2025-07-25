@@ -2,12 +2,14 @@ public class Jogador {
     private int linha, coluna;
     private int pontos;
     private int movimentos;
+    private int tesouro;
 
     public Jogador() {
         this.linha = 0;
         this.coluna = 0;
         this.pontos = 0;
         this.movimentos = 0;
+        this.tesouro = 0;
     }
 
     public int getLinha() { return linha; }
@@ -27,5 +29,13 @@ public class Jogador {
 
     public void atualizarPontos(int valor) {
         pontos += valor;
+    }
+
+    public void setTesouro(int tesouro) {
+        this.tesouro = tesouro;
+    }
+
+    public int getTesouro() {
+        return tesouro;
     }
 }
