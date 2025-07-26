@@ -3,6 +3,7 @@ public class Jogador {
     private int pontos;
     private int movimentos;
     private int tesouro;
+    private int armadilha;
 
     public Jogador() {
         this.linha = 0;
@@ -12,10 +13,6 @@ public class Jogador {
         this.tesouro = 0;
     }
 
-    public int getLinha() { return linha; }
-    public int getColuna() { return coluna; }
-    public int getPontos() { return pontos; }
-    public int getMovimentos() { return movimentos; }
 
     public void mover(char direcao) {
         switch (Character.toUpperCase(direcao)) {
@@ -31,11 +28,48 @@ public class Jogador {
         pontos += valor;
     }
 
-    public void setTesouro(int tesouro) {
-        this.tesouro = tesouro;
+
+    // gets
+    public int getArmadilha() {
+        return armadilha;
     }
+
+    public int getLinha() { return linha; }
+
+    public int getColuna() { return coluna; }
+
+    public int getPontos() { return pontos; }
+
+    public int getMovimentos() { return movimentos; }
+
 
     public int getTesouro() {
         return tesouro;
     }
+
+    // sets
+    public void setTesouro(int tesouro) {
+        this.tesouro = tesouro;
+    }
+
+    public void setArmadilha(int armadilha) {
+        this.armadilha = armadilha;
+    }
+
+    public void setColuna(int coluna) {
+        this.coluna = coluna;
+    }
+
+    public void setLinha(int linha) {
+        this.linha = linha;
+    }
+
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
+    }
+
+    public void setMovimentos(int movimentos) {
+        this.movimentos = movimentos;
+    }
+
 }

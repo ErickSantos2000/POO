@@ -1,20 +1,15 @@
 import java.util.*;
 
 public class Jogo {
-    private ElementoTabuleiro[][] tabuleiro;
-
-    private Set<String> filtro;
+    private ElementoTabuleiro[][] tabuleiro; // POLIMORFISMO: matriz armazena objetos de subclasses (Tesouro, Armadilha, Vazio)
+    private Set<String> elementosVisitados;
     private Jogador jogador;
-    private int movimentosRestantes;
 
     public Jogo() {
         tabuleiro = new ElementoTabuleiro[6][6];
-        filtro = new HashSet<>();
-        filtro.add("0,0");
+        elementosVisitados = new HashSet<>();
+        elementosVisitados.add("0,0");
         jogador = new Jogador();
-
-
-        movimentosRestantes = 10;
     }
 
     private void inicializarTabuleiro() {
@@ -33,7 +28,7 @@ public class Jogo {
             int i = rand.nextInt(6);
             int j = rand.nextInt(6);
             if (tabuleiro[i][j] == null) {
-                tabuleiro[i][j] = new Tesouro();
+                tabuleiro[i][j] = new Tesouro(); // POLIMORFISMO: atribuição de subclasse Tesouro à referência da superclasse
                 tesourosColocados++;
             }
         }
@@ -44,7 +39,7 @@ public class Jogo {
             int linha = rand.nextInt(6);
             int coluna = rand.nextInt(6);
             if (tabuleiro[linha][coluna] == null) {
-                tabuleiro[linha][coluna] = new Armadilha();
+                tabuleiro[linha][coluna] = new Armadilha(); // POLIMORFISMO: subclasse Armadilha na referência superclasse
                 armadilhasColocadas++;
             }
         }
@@ -53,12 +48,11 @@ public class Jogo {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (tabuleiro[i][j] == null) {
-                    tabuleiro[i][j] = new Vazio();
+                    tabuleiro[i][j] = new Vazio(); // POLIMORFISMO: subclasse Vazio na referência superclasse
                 }
             }
         }
     }
-
 
     public void jogar() {
         inicializarTabuleiro();
@@ -69,16 +63,13 @@ public class Jogo {
             mostrarTabuleiro();
 
             System.out.println("======================");
-            System.out.println("Movimento restantes: " + movimentosRestantes);
+            System.out.println("Numero de movimentos: " + jogador.getMovimentos());
             System.out.println("Ponto:" + jogador.getPontos());
             System.out.println("Tesouros encontrados: " + jogador.getTesouro());
             System.out.println("======================");
 
-
             System.out.print("Movimento \nW - cima\nS - baixo\nA - esquerda\nD - direita\n");
             char movimento = sc.next().charAt(0);
-
-
 
             int linhaTeste = jogador.getLinha();
             int colunaTeste = jogador.getColuna();
@@ -98,50 +89,93 @@ public class Jogo {
                 continue;
             }
 
-            String pos = linhaTeste + "," + colunaTeste;
+            // pega a posição atual do tabuleiro
+            String posicao = linhaTeste + "," + colunaTeste;
 
-            if(filtro.contains(pos)){
+            // verifica se posição atual ja foi visitado
+            if(elementosVisitados.contains(posicao)){
                 System.out.println("Vc ja visitou essa posiçao. Jogada perdida");
                 continue;
             }
 
-
             // incia o movimento
             jogador.mover(movimento);
-            movimentosRestantes--;
 
             int linha = jogador.getLinha();
             int coluna = jogador.getColuna();
 
             // marca como visitado
-            filtro.add(linha + "," + coluna);
+            elementosVisitados.add(linha + "," + coluna);
 
-            tabuleiro[linha][coluna].interagir(jogador);
-
-
-            System.out.println("vc encontrou: " + tabuleiro[linha][coluna].simbolo());
+            tabuleiro[linha][coluna].interagir(jogador); // POLIMORFISMO: método interagir executa a versão da subclasse correta
+            
+            System.out.println("vc encontrou: " + tabuleiro[linha][coluna].simbolo()); // POLIMORFISMO: método simbolo executa a versão correta da subclasse
         }
 
         System.out.println("=========FINAL=========");
-        System.out.println("Pontuação final:" + jogador.getPontos());
+        System.out.println("Pontuação final: " + jogador.getPontos());
         System.out.println("Tesouros encontrados: " + jogador.getTesouro());
+        mostrarTabuleiroFinal();
         System.out.println("=======================");
     }
 
     // imprimir
     private void mostrarTabuleiro() {
         System.out.println("\nTabela:");
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                if (i == jogador.getLinha() && j == jogador.getColuna()) {
-                    System.out.print(" 🧍 ");
-                } else if (filtro.contains(i + "," + j)) {
-                    System.out.print(" " + tabuleiro[i][j].simbolo() + " ");
-                } else {
-                    System.out.print(" 🟥 ");
+        for (int i = 0; i < tabuleiro.length; i++) {
+            for (int j = 0; j < tabuleiro[i].length; j++) {
+
+                // aqui é controla onde o jogador esta
+                if (i == jogador.getLinha() && j == jogador.getColuna()) { 
+                        System.out.print(tabuleiro[i][j].simboloComJogador()); // POLIMORFISMO
+                    }
+                else if (elementosVisitados.contains(i + "," + j)) {
+                    System.out.print(tabuleiro[i][j].simbolo()); // POLIMORFISMO
+                } 
+                
+                else {
+                    System.out.print("🟥");
                 }
+                }
+                System.out.println();
+            }
+            
+        }
+    
+    // mostrar tabela apos o termino do jogo
+    public void mostrarTabuleiroFinal() {
+        System.out.println("\nTabela Final:");
+        for (int i = 0; i < tabuleiro.length; i++) {
+            for (int j = 0; j < tabuleiro[i].length; j++) {
+                System.out.print(tabuleiro[i][j].simbolo()); // POLIMORFISMO
             }
             System.out.println();
         }
+    }
+
+    // gets
+    public ElementoTabuleiro[][] getTabuleiro() {
+        return tabuleiro;
+    }
+
+    public Set<String> getElementosVisitados() {
+        return elementosVisitados;
+    }
+
+    public Jogador getJogador() {
+        return jogador;
+    }
+
+    // sets
+    public void setElementosVisitados(Set<String> filtro) {
+        this.elementosVisitados = filtro;
+    }
+
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
+    }
+
+    public void setTabuleiro(ElementoTabuleiro[][] tabuleiro) {
+        this.tabuleiro = tabuleiro;
     }
 }
