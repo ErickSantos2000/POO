@@ -1,3 +1,5 @@
+
+
 public class Jogador {
     private int linha, coluna;
     private int pontos;

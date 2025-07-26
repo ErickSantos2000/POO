@@ -7,6 +7,7 @@ public class Jogo {
 
     public Jogo() {
         tabuleiro = new ElementoTabuleiro[6][6];
+        tabuleiro[0][0] = new Vazio();
         elementosVisitados = new HashSet<>();
         elementosVisitados.add("0,0");
         jogador = new Jogador();
@@ -15,12 +16,7 @@ public class Jogo {
     private void inicializarTabuleiro() {
         Random rand = new Random();
 
-        // inicializa
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 6; j++) {
-                tabuleiro[i][j] = null;
-            }
-        }
+        
 
         // preenche o restante com tesouro
         int tesourosColocados = 0;
