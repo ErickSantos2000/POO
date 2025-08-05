@@ -3,11 +3,14 @@ import java.util.*;
 public class Jogo {
     private List<Jogador> jogadores;
     private Peca[][] tabuleiro;
-    private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
+    private int indiceJogador;
 
     public Jogo() {
         tabuleiro = new Peca[8][8];
         jogadores = new ArrayList<>();
+        scanner = new Scanner(System.in);
+        indiceJogador = 0;
     }
 
     public void iniciarTabuleiro() {
@@ -33,7 +36,7 @@ public class Jogo {
         }
     }
 
-    public void turno(int indiceJogador){
+    public void turno(){
         imprimirTabuleiro();
 
         // pega o jogador atual
@@ -51,7 +54,7 @@ public class Jogo {
         int EscolhaPeca = scanner.nextInt();
 
         if(EscolhaPeca >= jogadorAtual.getPecas().size() || EscolhaPeca < 0){
-            System.out.println("Escolha invalida!");
+            System.out.println("Escolha de peça invalida!");
             return;
         }
 
@@ -92,7 +95,6 @@ public class Jogo {
             adversario.removerPeca(tabuleiro[novoY][novoX]);
         }
 
-
         // atualiza a posição anterior da atual peça para null 
         tabuleiro[pecaAtual.getY()][pecaAtual.getX()] = null;
 
@@ -101,31 +103,36 @@ public class Jogo {
 
         // atualiza o tabuleiro
         tabuleiro[novoY][novoX] = pecaAtual;
+
     }
 
     // INICIALIZA O JOGO
     public void jogar() {
     iniciarTabuleiro();
 
-    int indiceJogador = 0; // 0 para Jogador 1, 1 para Jogador 2
-
-    while (jogadores.get(0).getPecas().size() > 0 && jogadores.get(1).getPecas().size() > 0) {
-        
-        turno(indiceJogador);
-
+    while (!taVazio()) {
         // alterna jogador
         indiceJogador = (indiceJogador == 0) ? 1 : 0;
-
+        turno();
     }
-        System.out.println("Fim de jogo!");
-        if (jogadores.get(0).getPecas().size() == 0) {
-            System.out.println("Jogador 2 venceu!");
-        } else {
-            System.out.println("Jogador 1 venceu!");
+
+    System.out.println("Fim de jogo!");
+    if (jogadores.get(0).getPecas().size() == 0) {
+        System.out.println("Jogador 2 venceu!");
+    } else {
+        System.out.println("Jogador 1 venceu!");
+    }
+    }
+
+    public boolean taVazio(){
+        for(int i = 0; i < jogadores.size(); i++){
+            Jogador jogador = jogadores.get(i);
+            if(jogador.getPecas().size() == 0){
+                return true;
+            }
         }
+        return false;
     }
-
-
 
     public void imprimirPeca(int indiceJogador){
     int cont = 0;

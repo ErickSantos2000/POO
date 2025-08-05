@@ -11,7 +11,7 @@ public class Cavaleiro extends Peca{
             int dx = novoX - getX();
             int dy = novoY - getY();
 
-            // Checa todas as posições em L (movimento do cavalo no xadrez)
+            // checa todas as posições em L
             if ((dx == 1 || dx == -1) && (dy == 2 || dy == -2)) {
                 return true;
             }
@@ -26,7 +26,6 @@ public class Cavaleiro extends Peca{
             super.moverPara(novoY, novoX);
         }
 
-        @Override
         public String getNome() {
             return super.getNome();
         }

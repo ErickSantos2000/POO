@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Jogo {
-    private ElementoTabuleiro[][] tabuleiro; // POLIMORFISMO: matriz armazena objetos de subclasses (Tesouro, Armadilha, Vazio)
+    private ElementoTabuleiro[][] tabuleiro;
     private Set<String> elementosVisitados;
     private Jogador jogador;
 
@@ -16,15 +16,13 @@ public class Jogo {
     private void inicializarTabuleiro() {
         Random rand = new Random();
 
-        
-
         // preenche o restante com tesouro
         int tesourosColocados = 0;
         while (tesourosColocados < 3) {
             int i = rand.nextInt(6);
             int j = rand.nextInt(6);
             if (tabuleiro[i][j] == null) {
-                tabuleiro[i][j] = new Tesouro(); // POLIMORFISMO: atribuição de subclasse Tesouro à referência da superclasse
+                tabuleiro[i][j] = new Tesouro();
                 tesourosColocados++;
             }
         }
@@ -35,7 +33,7 @@ public class Jogo {
             int linha = rand.nextInt(6);
             int coluna = rand.nextInt(6);
             if (tabuleiro[linha][coluna] == null) {
-                tabuleiro[linha][coluna] = new Armadilha(); // POLIMORFISMO: subclasse Armadilha na referência superclasse
+                tabuleiro[linha][coluna] = new Armadilha();
                 armadilhasColocadas++;
             }
         }
@@ -44,7 +42,7 @@ public class Jogo {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 if (tabuleiro[i][j] == null) {
-                    tabuleiro[i][j] = new Vazio(); // POLIMORFISMO: subclasse Vazio na referência superclasse
+                    tabuleiro[i][j] = new Vazio();
                 }
             }
         }
@@ -103,9 +101,9 @@ public class Jogo {
             // marca como visitado
             elementosVisitados.add(linha + "," + coluna);
 
-            tabuleiro[linha][coluna].interagir(jogador); // POLIMORFISMO: método interagir executa a versão da subclasse correta
+            tabuleiro[linha][coluna].interagir(jogador); // POLIMORFISMO
             
-            System.out.println("vc encontrou: " + tabuleiro[linha][coluna].simbolo()); // POLIMORFISMO: método simbolo executa a versão correta da subclasse
+            System.out.println("vc encontrou: " + tabuleiro[linha][coluna].simbolo()); // POLIMORFISMO
         }
 
         System.out.println("=========FINAL=========");
@@ -143,7 +141,7 @@ public class Jogo {
         System.out.println("\nTabela Final:");
         for (int i = 0; i < tabuleiro.length; i++) {
             for (int j = 0; j < tabuleiro[i].length; j++) {
-                System.out.print(tabuleiro[i][j].simbolo()); // POLIMORFISMO
+                System.out.print(tabuleiro[i][j].simbolo());
             }
             System.out.println();
         }

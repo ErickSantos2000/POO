@@ -9,7 +9,7 @@ public class Guerreiro extends Peca{
         int dx = novoX - getX();
         int dy = novoY - getY();
 
-        // verifaca se a diferença no movimento é de ate para x e y
+        // verifaca se a diferença no movimento é de ate 3 para x e y
         if (dx == 0 && (dy >= -3 && dy <= 3)) {
             return true; // movimento vertical
         }
