@@ -20,13 +20,13 @@ public class Jogo {
         jogadores.add(j1);
         jogadores.add(j2);
 
-        j1.addPeca(new Guerreiro(2, 0, 1));
-        j1.addPeca(new Arqueiro(3, 0, 1));
-        j1.addPeca(new Cavaleiro(4, 0, 1));
+        j1.addPeca(new Guerreiro(2, 0));
+        j1.addPeca(new Arqueiro(3, 0));
+        j1.addPeca(new Cavaleiro(4, 0));
 
-        j2.addPeca(new Guerreiro(2, 7, 2));
-        j2.addPeca(new Arqueiro(3, 7,2));
-        j2.addPeca(new Cavaleiro(4, 7, 2));
+        j2.addPeca(new Guerreiro(2, 7));
+        j2.addPeca(new Arqueiro(3, 7));
+        j2.addPeca(new Cavaleiro(4, 7));
 
         // posiciona as peças no tabuleiro
         for (Jogador jogador : jogadores) {
@@ -36,7 +36,7 @@ public class Jogo {
         }
     }
 
-    public void turno(){
+    public boolean turno(){
         imprimirTabuleiro();
 
         // pega o jogador atual
@@ -55,7 +55,7 @@ public class Jogo {
 
         if(EscolhaPeca >= jogadorAtual.getPecas().size() || EscolhaPeca < 0){
             System.out.println("Escolha de peça invalida!");
-            return;
+            return false;
         }
 
         // pega a peça atual de acordo com a escolha do jogador
@@ -73,28 +73,30 @@ public class Jogo {
         // checa se o movimento esta fora dos limites
         if (novoY < 0 || novoY >= 8 || novoX < 0 || novoX >= 8) {
             System.out.println("Posição inválida.");
-            return;
+            return false;
         }
 
         //  checa se o movimento é valido de acordo com as regras de cada peças
         if (!pecaAtual.podeMoverPara(novoY, novoX) ) { // polimorfismo
             System.out.println("Movimento inválido.");
-            return;
+            return false;
         }
 
         boolean destino = tabuleiro[novoY][novoX] != null;
-
-        // checa se a peça é jogador atual
-        if (destino && jogadorAtual.getPecas().contains(tabuleiro[novoY][novoX])) {
+        
+        if(destino){
+            // checa se a peça é jogador atual
+            if (jogadorAtual.getPecas().contains(tabuleiro[novoY][novoX])) {
             System.out.println("Você não pode capturar sua própria peça!");
-            return;
-        }
+                return false;
+            }
+            // checa se peça é do jogador adversario
+            else if (adversario.getPecas().contains(tabuleiro[novoY][novoX])) {
+                adversario.removerPeca(tabuleiro[novoY][novoX]);
+            }
 
-        // checa se peça é do jogador adversario
-        if (destino && adversario.getPecas().contains(tabuleiro[novoY][novoX])) {
-            adversario.removerPeca(tabuleiro[novoY][novoX]);
         }
-
+        
         // atualiza a posição anterior da atual peça para null 
         tabuleiro[pecaAtual.getY()][pecaAtual.getX()] = null;
 
@@ -104,6 +106,8 @@ public class Jogo {
         // atualiza o tabuleiro
         tabuleiro[novoY][novoX] = pecaAtual;
 
+        return true;
+
     }
 
     // INICIALIZA O JOGO
@@ -111,9 +115,12 @@ public class Jogo {
     iniciarTabuleiro();
 
     while (!taVazio()) {
-        // alterna jogador
-        indiceJogador = (indiceJogador == 0) ? 1 : 0;
-        turno();
+       
+        if(turno()){
+            // alterna jogador
+            indiceJogador = (indiceJogador == 0) ? 1 : 0;
+        }
+        
     }
 
     System.out.println("Fim de jogo!");

@@ -3,14 +3,13 @@ public abstract class Peca {
     private String simbolo;
     private int y;
     private int x;
-    private int jogador;
 
-    public Peca(String nome, String simbolo, int y, int x, int jogador){
+
+    public Peca(String nome, String simbolo, int y, int x){
         this.nome = nome;
         this.simbolo = simbolo;
         this.y = y;
         this.x = x;
-        this.jogador = jogador;
     }
 
     public abstract boolean podeMoverPara(int novoY, int novoX);
@@ -24,10 +23,6 @@ public abstract class Peca {
         return nome;
     }
 
-    public int getJogador() {
-        return jogador;
-    }
-
     public int getX() {
         return x;
     }
@@ -39,10 +34,6 @@ public abstract class Peca {
 
     public String getSimbolo() {
         return simbolo;
-    }
-
-    public void setJogador(int jogador) {
-        this.jogador = jogador;
     }
 
     public void setNome(String nome) {
