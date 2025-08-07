@@ -48,7 +48,6 @@ public class Jogo {
         System.out.println("\nVez do jogador ("+ jogadorAtual.getNome() + ")");
         System.out.println("\nEscolha a peça que deseja mover pelo indice:");
 
-        //imprime as peça de cada jogador
         imprimirPeca(indiceJogador);
         System.out.println("Opção:");
         int EscolhaPeca = scanner.nextInt();
@@ -58,12 +57,11 @@ public class Jogo {
             return false;
         }
 
-        // pega a peça atual de acordo com a escolha do jogador
+
         Peca pecaAtual = jogadores.get(indiceJogador).getPecas().get(EscolhaPeca);
 
         System.out.println("Você escolheu " + pecaAtual.getNome() + " " + pecaAtual.getSimbolo());
 
-        // pede as posições para movimentar a peça
         System.out.println("Faça o movimento " );
         System.out.print("Y: ");
         int novoY = scanner.nextInt();
@@ -100,10 +98,10 @@ public class Jogo {
         // atualiza a posição anterior da atual peça para null 
         tabuleiro[pecaAtual.getY()][pecaAtual.getX()] = null;
 
-        // move a peça atual
+     
         pecaAtual.moverPara(novoY, novoX); // polimorfismo
 
-        // atualiza o tabuleiro
+     
         tabuleiro[novoY][novoX] = pecaAtual;
 
         return true;
