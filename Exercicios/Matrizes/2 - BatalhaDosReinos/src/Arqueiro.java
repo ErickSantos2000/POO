@@ -21,11 +21,6 @@ public class Arqueiro extends Peca {
         return false;
     }
 
-
-    public void moverPara(int novoY, int novoX) {
-        super.moverPara(novoY, novoX);
-    }
-
     // gets
     @Override
     public String getNome() {

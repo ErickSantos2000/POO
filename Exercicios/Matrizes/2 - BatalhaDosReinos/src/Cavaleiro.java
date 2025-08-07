@@ -18,12 +18,8 @@ public class Cavaleiro extends Peca{
             if ((dx == 2 || dx == -2) && (dy == 1 || dy == -1)) {
                 return true;
             }
-            
-            return false;
-        }
 
-        public void moverPara(int novoY, int novoX) {
-            super.moverPara(novoY, novoX);
+            return false;
         }
 
         // gets
