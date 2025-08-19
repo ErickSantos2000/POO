@@ -1,8 +1,11 @@
-public abstract class Peca {
+import java.io.*;
+
+public abstract class Peca implements Serializable {
     private String nome;
     private String simbolo;
     private int y;
     private int x;
+    private static final long serialVersionUID = 1L;
 
 
     public Peca(String nome, String simbolo, int y, int x){

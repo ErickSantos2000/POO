@@ -1,15 +1,19 @@
 import java.util.*;
+import java.io.*;
 
-public class Jogo {
+public class Jogo implements Serializable {
+    private static final long serialVersionUID = 1L;
     private List<Jogador> jogadores;
     private Peca[][] tabuleiro;
-    private Scanner scanner;
+    private transient Scanner scanner;
     private int indiceJogador;
+
 
     public Jogo() {
         tabuleiro = new Peca[8][8];
         jogadores = new ArrayList<>();
         scanner = new Scanner(System.in);
+
         indiceJogador = 0;
     }
 
@@ -48,6 +52,7 @@ public class Jogo {
         System.out.println("\nVez do jogador ("+ jogadorAtual.getNome() + ")");
         System.out.println("\nEscolha a peça que deseja mover pelo indice:");
 
+        //imprime as peça de cada jogador
         imprimirPeca(indiceJogador);
         System.out.println("Opção:");
         int EscolhaPeca = scanner.nextInt();
@@ -57,14 +62,17 @@ public class Jogo {
             return false;
         }
 
-
+        // pega a peça atual de acordo com a escolha do jogador
         Peca pecaAtual = jogadores.get(indiceJogador).getPecas().get(EscolhaPeca);
 
         System.out.println("Você escolheu " + pecaAtual.getNome() + " " + pecaAtual.getSimbolo());
 
+        // pede as posições para movimentar a peça
         System.out.println("Faça o movimento " );
+
         System.out.print("Y: ");
         int novoY = scanner.nextInt();
+
         System.out.print("X: ");
         int novoX = scanner.nextInt();
 
@@ -98,11 +106,13 @@ public class Jogo {
         // atualiza a posição anterior da atual peça para null 
         tabuleiro[pecaAtual.getY()][pecaAtual.getX()] = null;
 
-     
+        // move a peça atual
         pecaAtual.moverPara(novoY, novoX); // polimorfismo
 
-     
+        // atualiza o tabuleiro
         tabuleiro[novoY][novoX] = pecaAtual;
+
+        SavePoint.salvar(this);
 
         return true;
 
@@ -110,28 +120,39 @@ public class Jogo {
 
     // INICIALIZA O JOGO
     public void jogar() {
-    iniciarTabuleiro();
 
-    while (!taVazio()) {
-       
-        if(turno()){
-            // alterna jogador
-            indiceJogador = (indiceJogador == 0) ? 1 : 0;
+        Jogo jogoSalvo = (Jogo) SavePoint.carregar();
+
+        if(jogoSalvo != null){
+            this.jogadores = jogoSalvo.jogadores;
+            this.tabuleiro = jogoSalvo.tabuleiro;
+            this.indiceJogador = jogoSalvo.indiceJogador;
+            this.scanner = new Scanner(System.in);
+        } else {
+            iniciarTabuleiro();
         }
-        
-    }
 
-    System.out.println("Fim de jogo!");
-    if (jogadores.get(0).getPecas().size() == 0) {
-        System.out.println("Jogador 2 venceu!");
-    } else {
-        System.out.println("Jogador 1 venceu!");
-    }
+
+
+        while (!taVazio()) {
+
+            if(turno()){
+                // alterna jogador
+                indiceJogador = (indiceJogador == 0) ? 1 : 0;
+            }
+
+        }
+
+        System.out.println("Fim de jogo!");
+        if (jogadores.get(0).getPecas().size() == 0) {
+            System.out.println("Jogador 2 venceu!");
+        } else {
+            System.out.println("Jogador 1 venceu!");
+        }
     }
 
     public boolean taVazio(){
-        for(int i = 0; i < jogadores.size(); i++){
-            Jogador jogador = jogadores.get(i);
+        for(Jogador jogador : jogadores){
             if(jogador.getPecas().size() == 0){
                 return true;
             }
