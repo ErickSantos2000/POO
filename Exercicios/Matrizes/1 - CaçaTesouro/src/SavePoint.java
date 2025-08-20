@@ -16,4 +16,27 @@ public class SavePoint {
             System.out.println("Erro ao salvar" + e.getMessage());
         }
     }
+
+    public static Object carregar(){
+        try(ObjectInputStream inFluxo = new ObjectInputStream(new FileInputStream(jogoSalvo))){
+            // le o obj do arquivo, salva na variavel para retorna o obj
+            Object obj = inFluxo.readObject();
+            System.out.println("Jogo carregado");
+            return obj;
+        } catch (IOException e) {
+            System.out.println("Não foi possível carregar: " + e.getMessage());
+            return null;
+        } catch (ClassNotFoundException e) {
+            System.out.println("Classe do objeto não encontrada: " + e.getMessage());
+            return null;
+        }
+    }
+
+     public static void deletarSave() {
+        File file = new File(jogoSalvo);
+        if (file.exists()) {
+            file.delete();
+            System.out.println("Save deletado.");
+        }
+    }
 }

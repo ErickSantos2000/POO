@@ -1,9 +1,14 @@
-import java.util.*;
+import jdk.jshell.Snippet;
 
-public class Jogo {
+import java.util.*;
+import java.io.*;
+
+public class Jogo implements Serializable {
+    private static final long serialVersionUID = 1L;
     private ElementoTabuleiro[][] tabuleiro;
     private Set<String> elementosVisitados;
     private Jogador jogador;
+    private transient Scanner sc;
 
     public Jogo() {
         tabuleiro = new ElementoTabuleiro[6][6];
@@ -11,6 +16,7 @@ public class Jogo {
         elementosVisitados = new HashSet<>();
         elementosVisitados.add("0,0");
         jogador = new Jogador();
+        sc = new Scanner(System.in);
     }
 
     private void inicializarTabuleiro() {
@@ -49,8 +55,18 @@ public class Jogo {
     }
 
     public void jogar() {
-        inicializarTabuleiro();
-        Scanner sc = new Scanner(System.in);
+
+
+
+        Jogo salvoJogo = (Jogo) SavePoint.carregar();
+        if(salvoJogo != null){
+            this.jogador = salvoJogo.jogador;
+            this.tabuleiro = salvoJogo.tabuleiro;
+            this.elementosVisitados = salvoJogo.elementosVisitados;
+            this.sc = new Scanner(System.in);
+        } else {
+            inicializarTabuleiro();
+        }
 
         while (jogador.getMovimentos() < 10 && jogador.getTesouro() < 3) {
 
@@ -104,6 +120,8 @@ public class Jogo {
             tabuleiro[linha][coluna].interagir(jogador); // POLIMORFISMO
             
             System.out.println("vc encontrou: " + tabuleiro[linha][coluna].simbolo()); // POLIMORFISMO
+
+            SavePoint.salvar(this);
         }
 
         System.out.println("=========FINAL=========");
@@ -111,6 +129,8 @@ public class Jogo {
         System.out.println("Tesouros encontrados: " + jogador.getTesouro());
         mostrarTabuleiroFinal();
         System.out.println("=======================");
+
+        SavePoint.deletarSave();
     }
 
     // imprimir

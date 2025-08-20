@@ -1,6 +1,7 @@
+import java.io.*;
 
-
-public class Jogador {
+public class Jogador implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int linha, coluna;
     private int pontos;
     private int movimentos;
